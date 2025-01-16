@@ -26,7 +26,7 @@ public class PromoterController {
 
     @GetMapping("/paginate")
     public ResponseEntity<Page<Promoter>> getAllPromotersPaginate(
-            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+            @PageableDefault(size = 10) Pageable pageable) {
         Page<Promoter> promoters = promoterService.paginate(pageable);
         return new ResponseEntity<Page<Promoter>>(promoters, HttpStatus.OK);
     }

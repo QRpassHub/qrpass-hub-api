@@ -42,7 +42,7 @@ public class PromoterServiceImp implements PromoterService {
         if(promoterRepository.existsByEmail(promoter.getEmail())){
             throw new RuntimeException("Email already exists");
         }
-        if (promoterRepository.existByDni(promoter.getDni())){
+        if (promoterRepository.existsByDni(promoter.getDni())){
             throw new RuntimeException("DNI already exists");
         }
         return promoterRepository.save(promoter);
@@ -59,7 +59,7 @@ public class PromoterServiceImp implements PromoterService {
         if(promoterRepository.existsByEmail(promoter.getEmail())){
             throw new RuntimeException("Email already exists");
         }
-        if (promoterRepository.existByDni(promoter.getDni())){
+        if (promoterRepository.existsByDni(promoter.getDni())){
             throw new RuntimeException("DNI already exists");
         }
         promoterToUpdate.setDni(promoter.getDni());

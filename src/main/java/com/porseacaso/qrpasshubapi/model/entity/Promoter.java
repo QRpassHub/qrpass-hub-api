@@ -18,12 +18,12 @@ public class Promoter {
     @Column(name= "email", nullable = false, columnDefinition = "Text")
     private String email;
 
-    @Column(name= "password", nullable = false, columnDefinition = "Text")
+    @Column(name= "name", nullable = false, columnDefinition = "Text")
     private String name;
 
-    @Column(name= "name", nullable = false, columnDefinition = "Text")
+    @Column(name= "paternal_last_name", nullable = false, columnDefinition = "Text")
     private String paternalLastName;
 
-    @Column(name= "paternal_last_name", nullable = false, columnDefinition = "Text")
+    @Column(name= "maternal_last_name", nullable = false, columnDefinition = "Text")
     private String maternalLastName;
 }
