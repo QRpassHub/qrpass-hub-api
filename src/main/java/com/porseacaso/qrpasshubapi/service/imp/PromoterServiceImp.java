@@ -39,6 +39,12 @@ public class PromoterServiceImp implements PromoterService {
     @Transactional
     @Override
     public Promoter create(Promoter promoter) {
+        if(promoterRepository.existsByEmail(promoter.getEmail())){
+            throw new RuntimeException("Email already exists");
+        }
+        if (promoterRepository.existByDni(promoter.getDni())){
+            throw new RuntimeException("DNI already exists");
+        }
         return promoterRepository.save(promoter);
     }
 
@@ -46,6 +52,16 @@ public class PromoterServiceImp implements PromoterService {
     @Override
     public Promoter update(Integer id, Promoter promoter) {
         Promoter promoterToUpdate = getById(id);
+
+        if (promoterToUpdate == null){
+            throw new RuntimeException("Promoter not found");
+        }
+        if(promoterRepository.existsByEmail(promoter.getEmail())){
+            throw new RuntimeException("Email already exists");
+        }
+        if (promoterRepository.existByDni(promoter.getDni())){
+            throw new RuntimeException("DNI already exists");
+        }
         promoterToUpdate.setDni(promoter.getDni());
         promoterToUpdate.setEmail(promoter.getEmail());
         promoterToUpdate.setName(promoter.getName());
@@ -58,6 +74,9 @@ public class PromoterServiceImp implements PromoterService {
     @Override
     public void delete(Integer id) {
         Promoter promoterToDelete = getById(id);
+        if (promoterToDelete == null){
+            throw new RuntimeException("Promoter not found");
+        }
         promoterRepository.delete(promoterToDelete);
 
     }
