@@ -1,16 +1,17 @@
 package com.porseacaso.qrpasshubapi.service;
 
-import com.porseacaso.qrpasshubapi.model.entity.Promoter;
+import com.porseacaso.qrpasshubapi.dto.PromoterDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface PromoterService {
-    List<Promoter> getAll();
-    Page<Promoter> paginate(Pageable pageable);
-    Promoter getById(Integer id);
-    Promoter create(Promoter promoter);
-    Promoter update(Integer id, Promoter promoter);
+    List<PromoterDTO> getAll();
+    Page<PromoterDTO> paginate(Pageable pageable);
+    PromoterDTO getById(Integer id);
+    PromoterDTO create(PromoterDTO promoterDTO);
+    PromoterDTO update(Integer id, PromoterDTO promoterDTO);
     void delete(Integer id);
 }
+
