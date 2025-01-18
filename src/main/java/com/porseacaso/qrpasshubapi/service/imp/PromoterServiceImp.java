@@ -1,5 +1,9 @@
 package com.porseacaso.qrpasshubapi.service.imp;
 
+import com.porseacaso.qrpasshubapi.dto.PromoterDTO;
+import com.porseacaso.qrpasshubapi.exception.BadRequestException;
+import com.porseacaso.qrpasshubapi.exception.ResourceNotFoundException;
+import com.porseacaso.qrpasshubapi.mapper.PromoterMapper;
 import com.porseacaso.qrpasshubapi.model.entity.Promoter;
 import com.porseacaso.qrpasshubapi.repository.PromoterRepository;
 import com.porseacaso.qrpasshubapi.service.PromoterService;
@@ -17,66 +21,74 @@ import java.util.List;
 public class PromoterServiceImp implements PromoterService {
 
     private final PromoterRepository promoterRepository;
+    private final PromoterMapper promoterMapper;
 
     @Transactional(readOnly = true)
     @Override
-    public List<Promoter> getAll() {
-        return promoterRepository.findAll();
+    public List<PromoterDTO> getAll() {
+        List<Promoter> promoters = promoterRepository.findAll();
+        return promoters.stream().map(promoterMapper::toDto).toList();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Promoter> paginate(Pageable pageable) {
-        return promoterRepository.findAll(pageable);
+    public Page<PromoterDTO> paginate(Pageable pageable) {
+        Page<Promoter> promoters = promoterRepository.findAll(pageable);
+        return promoters.map(promoterMapper::toDto);
     }
 
     @Transactional
     @Override
-    public Promoter getById(Integer id) {
-        return promoterRepository.findById(id).orElseThrow(() -> new RuntimeException("Promoter not found"));
+    public PromoterDTO getById(Integer id) {
+        Promoter promoter = promoterRepository.findById(id).orElse(null);
+        return promoterMapper.toDto(promoter);
     }
 
     @Transactional
     @Override
-    public Promoter create(Promoter promoter) {
-        if(promoterRepository.existsByEmail(promoter.getEmail())){
-            throw new RuntimeException("Email already exists");
+    public PromoterDTO create(PromoterDTO promoterDTO) {
+        if(promoterRepository.existsByEmail(promoterDTO.getEmail())){
+            throw new BadRequestException("Email already exists");
         }
-        if (promoterRepository.existsByDni(promoter.getDni())){
-            throw new RuntimeException("DNI already exists");
+        if (promoterRepository.existsByDni(promoterDTO.getDni())){
+            throw new BadRequestException("DNI already exists");
         }
-        return promoterRepository.save(promoter);
+        Promoter promoter = promoterMapper.toEntity(promoterDTO);
+        promoter = promoterRepository.save(promoter);
+
+        return promoterMapper.toDto(promoter);
     }
 
     @Transactional
     @Override
-    public Promoter update(Integer id, Promoter promoter) {
-        Promoter promoterToUpdate = getById(id);
+    public PromoterDTO update(Integer id, PromoterDTO promoterDTO) {
+        Promoter promoterToUpdate = promoterRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Promoter not found"));
 
-        if (promoterToUpdate == null){
-            throw new RuntimeException("Promoter not found");
+        if(promoterRepository.existsByEmail(promoterDTO.getEmail())){
+            throw new BadRequestException("Email already exists");
         }
-        if(promoterRepository.existsByEmail(promoter.getEmail())){
-            throw new RuntimeException("Email already exists");
+        if (promoterRepository.existsByDni(promoterDTO.getDni())){
+            throw new BadRequestException("DNI already exists");
         }
-        if (promoterRepository.existsByDni(promoter.getDni())){
-            throw new RuntimeException("DNI already exists");
-        }
-        promoterToUpdate.setDni(promoter.getDni());
-        promoterToUpdate.setEmail(promoter.getEmail());
-        promoterToUpdate.setName(promoter.getName());
-        promoterToUpdate.setPaternalLastName(promoter.getPaternalLastName());
-        promoterToUpdate.setMaternalLastName(promoter.getMaternalLastName());
-        return promoterRepository.save(promoterToUpdate);
+        promoterToUpdate.setDni(promoterDTO.getDni());
+        promoterToUpdate.setEmail(promoterDTO.getEmail());
+        promoterToUpdate.setName(promoterDTO.getName());
+        promoterToUpdate.setPaternalLastName(promoterDTO.getPaternalLastName());
+        promoterToUpdate.setMaternalLastName(promoterDTO.getMaternalLastName());
+
+        promoterToUpdate = promoterRepository.save(promoterToUpdate);
+        return promoterMapper.toDto(promoterToUpdate);
+
+
     }
 
     @Transactional
     @Override
     public void delete(Integer id) {
-        Promoter promoterToDelete = getById(id);
-        if (promoterToDelete == null){
-            throw new RuntimeException("Promoter not found");
-        }
+        Promoter promoterToDelete = promoterRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Promoter not found"));
+
         promoterRepository.delete(promoterToDelete);
 
     }

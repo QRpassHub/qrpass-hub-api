@@ -1,7 +1,9 @@
 package com.porseacaso.qrpasshubapi.controller;
 
+import com.porseacaso.qrpasshubapi.dto.PromoterDTO;
 import com.porseacaso.qrpasshubapi.model.entity.Promoter;
 import com.porseacaso.qrpasshubapi.service.PromoterService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,34 +21,34 @@ public class PromoterController {
     private final PromoterService promoterService;
 
     @GetMapping
-    public ResponseEntity<List<Promoter>> getAllPromoters() {
-        List<Promoter> promoters = promoterService.getAll();
-        return new ResponseEntity<List<Promoter>>(promoters, HttpStatus.OK);
+    public ResponseEntity<List<PromoterDTO>> getAllPromoters() {
+        List<PromoterDTO> promoters = promoterService.getAll();
+        return new ResponseEntity<>(promoters, HttpStatus.OK);
     }
 
     @GetMapping("/paginate")
-    public ResponseEntity<Page<Promoter>> getAllPromotersPaginate(
+    public ResponseEntity<Page<PromoterDTO>> getAllPromotersPaginate(
             @PageableDefault(size = 10) Pageable pageable) {
-        Page<Promoter> promoters = promoterService.paginate(pageable);
-        return new ResponseEntity<Page<Promoter>>(promoters, HttpStatus.OK);
+        Page<PromoterDTO> promoters = promoterService.paginate(pageable);
+        return new ResponseEntity<>(promoters, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Promoter> getPromoterById(@PathVariable Integer id) {
-        Promoter promoter = promoterService.getById(id);
-        return new ResponseEntity<Promoter>(promoter, HttpStatus.OK);
+    public ResponseEntity<PromoterDTO> getPromoterById(@PathVariable Integer id) {
+        PromoterDTO promoter = promoterService.getById(id);
+        return new ResponseEntity<>(promoter, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Promoter> createPromoter(@RequestBody Promoter promoter){
-        Promoter promoterCreated = promoterService.create(promoter);
-        return new ResponseEntity<Promoter>(promoterCreated, HttpStatus.CREATED);
+    public ResponseEntity<PromoterDTO> createPromoter(@Valid @RequestBody PromoterDTO promoterDTO){
+        PromoterDTO newPromoter = promoterService.create(promoterDTO);
+        return new ResponseEntity<>(newPromoter, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Promoter> updatePromoter(@PathVariable Integer id, @RequestBody Promoter promoter){
-        Promoter promoterUpdated = promoterService.update(id, promoter);
-        return new ResponseEntity<Promoter>(promoterUpdated, HttpStatus.OK);
+    public ResponseEntity<PromoterDTO> updatePromoter(@PathVariable Integer id, @Valid @RequestBody PromoterDTO promoterDTO){
+        PromoterDTO promoterUpdated = promoterService.update(id, promoterDTO);
+        return new ResponseEntity<>(promoterUpdated, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
