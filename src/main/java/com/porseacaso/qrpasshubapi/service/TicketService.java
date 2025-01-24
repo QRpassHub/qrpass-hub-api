@@ -13,9 +13,9 @@ public interface TicketService {
     Page<TicketResponseDTO> paginate(Pageable pageable);
     TicketResponseDTO getById(Integer id);
     TicketResponseDTO getByUuid(String uuid);
-    TicketDTO create(TicketDTO ticketDTO);
+    TicketResponseDTO create(TicketDTO ticketDTO);
     byte[] generateQRCode(String uuid);
-    TicketDTO update(Integer id, TicketDTO ticketDTO);
+    TicketResponseDTO update(Integer id, TicketDTO ticketDTO);
     TicketResponseDTO confirm(String uuid);
     void delete(Integer id);
 
