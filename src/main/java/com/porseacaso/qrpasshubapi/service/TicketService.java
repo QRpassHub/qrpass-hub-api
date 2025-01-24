@@ -14,6 +14,7 @@ public interface TicketService {
     TicketResponseDTO getById(Integer id);
     TicketResponseDTO getByUuid(String uuid);
     TicketDTO create(TicketDTO ticketDTO);
+    byte[] generateQRCode(String uuid);
     TicketDTO update(Integer id, TicketDTO ticketDTO);
     TicketResponseDTO confirm(String uuid);
     void delete(Integer id);
