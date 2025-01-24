@@ -11,7 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 @Component
-public class QRCodeGenerator {
+public class QRCodeGeneratorComponent {
 
     public byte[] generateQRCode(String text, int width, int height) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
