@@ -17,7 +17,7 @@ public class Ticket {
 
     @Column(name = "uuid", nullable = false, unique = true, columnDefinition = "Text")
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Float uuid;
+    private String uuid;
 
     @Column(name = "creation_date", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime creationDate;
